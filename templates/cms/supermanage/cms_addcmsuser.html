@@ -1,0 +1,89 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}添加CMS用户{% endblock %}
+
+{% block head %}
+    <style>
+        .outer-group{
+            width: 400px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#submit-btn').click(function (event) {
+                event.preventDefault();
+                var usernameInput = $('input[name="username"]');
+                var emailInput = $('input[name="email"]');
+
+                var roles = [];
+                var roleCheckboxs = $('input[type="checkbox"]:checked');
+                roleCheckboxs.each(function (index,element) {
+                    roles.push($(element).val());
+                });
+
+                if(roles.length == 0){
+                    xtalert.alertInfoToast('请至少选择一个分组！');
+                    return;
+                }
+
+                // 发送ajax
+                xtajax.post({
+                    'url': '/cms/cmsuser_manage/add_cmsuser/',
+                    'data': {
+                        'username': usernameInput.val(),
+                        'email': emailInput.val(),
+                        'roles[]': roles
+                    },
+                    'success': function (data) {
+                        if(data['code'] != 200){
+                            xtalert.alertInfoToast(data['message']);
+                        }else{
+                            xtalert.alertSuccess('添加成功！默认密码是6个1，请及时修改！',function () {
+                          window.location.reload();
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block page_title %}{{ self.title() }}{% endblock %}
+
+{% block main %}
+    <div class="outer-group">
+        <form action="" method="POST" class="form-horizontal">
+            <div class="form-group">
+                <label for="" class="control-label col-md-3">用户名：</label>
+                <div class="col-md-9">
+                    <input type="text" placeholder="用户名" name="username" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="control-label col-md-3">邮箱：</label>
+                <div class="col-md-9">
+                    <input type="email" placeholder="邮箱" name="email" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">所属组：</label>
+                <div class="col-md-9">
+                    {% for role in roles %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="{{ role.id }}"> {{ role.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3"></div>
+                <div class="col-md-9">
+                    <button class="btn btn-primary" id="submit-btn">立即添加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

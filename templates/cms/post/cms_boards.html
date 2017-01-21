@@ -1,0 +1,44 @@
+{% extends 'cms/post/cms_posts.html' %}
+
+{% block title %}板块管理{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='cms/post/css/cms_boards.css') }}">
+    <script src="{{ url_for('static',filename='cms/post/js/cms_boards.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}板块管理{% endblock %}
+
+{% block main %}
+    <div class="top-group">
+        <button class="btn btn-warning" id="add-board-btn">添加新板块</button>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>板块名称</th>
+            <th>创建者</th>
+            <th>创建时间</th>
+            <th>帖子数量</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+            {% for board in boards %}
+                <tr>
+                    <td>{{ board.name }}</td>
+                    <td>{{ board.author.username }}</td>
+                    <td>{{ board.create_time }}</td>
+                    <td>{{ board.posts|length }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-xs edit-board-btn" data-board-id="{{ board.id }}">编辑</button>
+                        {% if board.posts|length > 0 %}
+                            <button class="btn btn-danger btn-xs disabled">删除</button>
+                        {% else %}
+                            <button class="btn btn-danger btn-xs delete-btn" data-board-id="{{ board.id }}">删除</button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

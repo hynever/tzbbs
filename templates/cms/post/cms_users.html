@@ -1,0 +1,75 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}用户管理{% endblock %}
+
+{% block head %}
+    <style>
+        .table td:last-of-type{
+            width: 80px;
+        }
+        .top-group .sort-select{
+            border: 1px solid #dfdfdf;
+            background: none;
+            color: #666;
+            border-radius: 2px;
+        }
+    </style>
+    <script src="{{ url_for('static',filename='cms/post/js/cms_users.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}
+    {{ self.title() }}
+{% endblock %}
+
+{% block main %}
+    <div class="top-group">
+        <label for="" class="label-control">排序：</label>
+        <select name="" id="" class="sort-select">
+            <option value="1">按时间排序</option>
+            <option value="2">按帖子量排序</option>
+            <option value="2">按评论量排序</option>
+        </select>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>用户名</th>
+            <th>加入时间</th>
+            <th>发表帖子数</th>
+            <th>评论数</th>
+            <th>分组</th>
+            <th>状态</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.joined_time }}</td>
+                    <td>{{ user.posts|length }}</td>
+                    <td>10</td>
+                    <td>
+                        {% for role in user.roles %}
+                            {% if loop.last %}
+                                {{ role.name }}
+                            {% else %}
+                                {{ role.name }},
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="label label-success">可用</span>
+                        {% else %}
+                            <span class="label label-danger">已拉黑</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('cms.edit_user',id=user.id) }}" class="btn btn-primary btn-xs">编辑</a>
+
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

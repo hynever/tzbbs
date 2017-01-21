@@ -1,0 +1,29 @@
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, cite, code, dd, del, details, dfn, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style: none;
+    vertical-align: baseline;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ccc;
+}
+
+.form-control{
+    box-shadow: none;
+}
+
+.captcha-img{
+    width: 80px;
+    height:30px;
+}
+
+.captcha-addon{
+    padding: 0px;
+}
+
+a:hover{
+    text-decoration: none;
+}

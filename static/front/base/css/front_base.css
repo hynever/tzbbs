@@ -1,0 +1,92 @@
+.container{
+    width: 990px;
+    padding: 0;
+}
+
+body{
+    background: #f3f3f3;
+    font-family: arial,"Microsoft Yahei","Hiragino Sans GB",sans-serif;
+    color: #333;
+    font-size: 14px;
+}
+
+.user-avatar{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.list-group-item.header{
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+.list-group-item.active{
+    background: #f0ad4e;
+    border-color: #f0ad4e;
+}
+.list-group-item.active:hover{
+    background: #f0ad4e;
+    border-color: #f0ad4e;
+}
+
+.lg-container{
+    width: 730px;
+    float: left;
+}
+
+.sm-container{
+    width: 250px;
+    float: right;
+}
+
+
+.post-list li{
+    padding-top: 16px;
+}
+
+.post-list li .post-list-img{
+    width: 50px;
+    float: left;
+}
+
+.post-list-img img{
+    width: 50px;
+    height:50px;
+    border-radius: 50%;
+    display: block;
+}
+
+.post-list li .post-list-con{
+    margin-left: 60px;
+}
+
+.post-list-con .title{
+    margin-top: 10px;
+}
+
+.post-list-con .title .title_name{
+    max-width: 524px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #333;
+    font-size: 16px;
+}
+
+.title .title_name:hover{
+    color: #ff6f3d;
+}
+
+.post-list-con .auth-msg{
+    line-height: 18px;
+    margin: 6px 0 0;
+    padding-bottom: 11px;
+    border-bottom: 1px solid #e6e6e6;
+    color: #8c8c8c;
+    font-size: 12px;
+}
+
+.auth-msg .user_name{
+    color: #8c8c8c;
+}

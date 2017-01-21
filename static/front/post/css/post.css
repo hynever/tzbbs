@@ -1,0 +1,29 @@
+#editor{
+    height:500px;
+    border-radius: 4px;
+}
+
+.wangEditor-container,.wangEditor-container > div{
+    border-radius: 4px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ccc;
+}
+
+.form-control{
+    box-shadow: none;
+}
+
+.captcha-group{
+    max-width: 163px;
+}
+
+.title-btn-group{
+    float: left;
+}
+
+.upload-btn-group{
+    float: right;
+}

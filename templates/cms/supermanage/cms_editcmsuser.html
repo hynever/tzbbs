@@ -1,0 +1,171 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}编辑CMS用户{% endblock %}
+
+{% block head %}
+    <style>
+        .outer-group{
+            width: 400px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#submit-btn').click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var usernameInput = $('input[name="username"]');
+                var emailInput = $('input[name="email"]');
+
+                var roles = [];
+                var roleCheckboxs = $('input[type="checkbox"]:checked');
+                roleCheckboxs.each(function (index,element) {
+                    roles.push($(element).val());
+                });
+
+                if(roles.length == 0){
+                    xtalert.alertInfoToast('请至少选择一个分组！');
+                    return;
+                }
+
+                console.log(roles);
+
+                // 发送ajax
+                xtajax.post({
+                    'url': '/cms/cmsuser_manage/edit_cmsuser/',
+                    'data': {
+                        'id': self.attr('data-user-id'),
+                        'username': usernameInput.val(),
+                        'email': emailInput.val(),
+                        'roles[]': roles
+                    },
+                    'success': function (data) {
+                        if(data['code'] != 200){
+                            xtalert.alertInfoToast(data['message']);
+                        }else{
+                            xtalert.alertSuccessToast('修改成功！');
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1000);
+                        }
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            $('#add-backlist-btn').click(function (event) {
+                var self = $(this);
+                event.preventDefault();
+                // 弹出确认框
+                xtalert.alertConfirm({
+                    'msg': '您确定要将该用户加入黑名单吗？',
+                    'confirmCallback': function () {
+                        // 发送ajax
+                        xtajax.post({
+                            'url': '/cms/cmsuser_manage/add_cmsuser_backlist/',
+                            'data': {
+                                'id': self.attr('data-user-id')
+                            },
+                            'success': function (data) {
+                                if(data['code'] != 200){
+                                    setTimeout(function () {
+                                        xtalert.alertInfoToast(data['code']);
+                                    },500);
+                                }else{
+                                    setTimeout(function () {
+                                        xtalert.alertSuccessToast('已经加入黑名单！');
+                                    },500);
+                                    setTimeout(function () {
+                                        window.location.reload();
+                                    },1000);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            $('#remove-backlist-btn').click(function (event) {
+                var self = $(this);
+                event.preventDefault();
+                xtalert.alertConfirm({
+                    'msg': '您确定要将该用户移除黑名单吗？',
+                    'confirmCallback': function () {
+                        // 发送ajax
+                        xtajax.post({
+                            'url': '/cms/cmsuser_manage/remove_cmsuser_backlist/',
+                            'data': {
+                                'id': self.attr('data-user-id')
+                            },
+                            'success': function (data) {
+                                if (data['code'] != 200) {
+                                    setTimeout(function () {
+                                        xtalert.alertInfoToast(data['code']);
+                                    }, 500);
+                                } else {
+                                    setTimeout(function () {
+                                        xtalert.alertSuccessToast('已经移除黑名单！');
+                                    }, 500);
+                                    setTimeout(function () {
+                                        window.location.reload();
+                                    }, 1000);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block page_title %}{{ self.title() }}{% endblock %}
+
+{% block main %}
+    <div class="outer-group">
+        <form action="" method="POST" class="form-horizontal">
+            <div class="form-group">
+                <label for="" class="control-label col-md-3">用户名：</label>
+                <div class="col-md-9">
+                    <input type="text" placeholder="用户名" name="username" class="form-control" value="{{ user.username }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="control-label col-md-3">邮箱：</label>
+                <div class="col-md-9">
+                    <input type="email" placeholder="邮箱" name="email" class="form-control" value="{{ user.email }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">所属组：</label>
+                <div class="col-md-9">
+                    {% for role in roles %}
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="{{ role.id }}" {% if role.id in current_roles %}checked{% endif %}> {{ role.name }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3"></div>
+                <div class="col-md-9">
+                    {% if user.is_active %}
+                        <button class="btn btn-danger" id="add-backlist-btn" data-user-id="{{ user.id }}">加入黑名单</button>
+                    {% else %}
+                        <button class="btn btn-warning" id="remove-backlist-btn" data-user-id="{{ user.id }}">取消黑名单</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3"></div>
+                <div class="col-md-9">
+                    <button class="btn btn-primary" id="submit-btn" data-user-id="{{ user.id }}">提交修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

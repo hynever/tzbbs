@@ -1,0 +1,50 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}组管理{% endblock %}
+
+{% block head %}
+    <style>
+        .top-group{
+            text-align: right;
+        }
+        .table td:last-of-type{
+            width: 100px;
+        }
+        .table td:nth-of-type(2){
+            width: 180px;
+        }
+    </style>
+    <script src="{{ url_for('static',filename='cms/post/js/cms_roles.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}组管理{% endblock %}
+
+{% block main %}
+    <div class="top-group">
+        <button class="btn btn-warning" id="add-role-btn">添加新分组</button>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>组名称</th>
+            <th>创建时间</th>
+            <th>创建者</th>
+            <th>用户数</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+            {% for role in roles %}
+                <tr>
+                    <td>{{ role.name }}</td>
+                    <td>{{ role.create_time }}</td>
+                    <td>{{ role.author.username }}</td>
+                    <td>{{ role.users|length }}</td>
+                    <td>
+                        <button class="btn btn-primary btn-xs edit-btn" data-role-id="{{ role.id }}">编辑</button>
+                        <button class="btn btn-danger btn-xs delete-btn" data-role-id="{{ role.id }}">删除</button>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,41 @@
+
+.wrapper{
+    background: #fff;
+    width: 854px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+    margin-top: 150px;
+}
+
+.logo{
+    width: 60px;
+    height:60px;
+    margin: 0 auto;
+}
+
+.logo img{
+    width: 60px;
+    height: 60px;
+    display: block;
+}
+
+.sign-group{
+    padding-top: 20px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.page-title{
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 30px;
+}
+
+.remember-me{
+	float: left;
+    margin-top: 0;
+}
+
+.forgetpwd{
+	float: right;
+}

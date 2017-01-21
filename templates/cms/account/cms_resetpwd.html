@@ -1,0 +1,47 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block head %}
+    <style>
+        .group{
+            max-width: 315px;
+        }
+        .form-horizontal .control-label{
+            text-align: left;
+        }
+    </style>
+    <script src="{{ url_for('static',filename='cms/account/js/cms_resetpwd.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}修改密码{% endblock %}
+
+{% block main %}
+    <form action="" method="POST" class="form-horizontal">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="group">
+            <div class="form-group">
+                <label class="col-md-4 control-label">原密码：</label>
+                <div class="col-md-8">
+                    <input type="password" name="oldpwd" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">新密码：</label>
+                <div class="col-md-8">
+                    <input type="password" name="newpwd1" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">确认新密码：</label>
+                <div class="col-md-8">
+                    <input type="password" name="newpwd2" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label"></label>
+                <div class="col-md-8">
+                    <button class="btn btn-primary" type="submit" id="submit-btn">立即保存</button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

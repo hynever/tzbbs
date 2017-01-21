@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>潭州Python学院论坛CMS登录</title>
+    {% include 'common/base/base_head.html' %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='cms/account/css/cms_login.css') }}">
+</head>
+<body>
+    <div class="container">
+      <form class="form-signin" role="form" method="POST">
+          <input name=csrf_token type=hidden value="{{ csrf_token() }}">
+        <h2 class="form-signin-heading">请登录</h2>
+        <input type="email" name="email" class="form-control" placeholder="邮箱" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="密码" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="1" name="remember"> 记住我
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+          {% if message %}
+            <p class="text-danger">{{ message }}</p>
+          {% endif %}
+      </form>
+    </div>
+</body>
+</html>

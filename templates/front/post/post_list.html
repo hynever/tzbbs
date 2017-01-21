@@ -1,0 +1,114 @@
+{% extends 'front/base/front_base.html' %}
+
+{% block title %}帖子列表 {% endblock %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='front/post/css/post_list.css') }}">
+    <style>
+        .read-count{
+            float: right;
+            margin-right: 15px;
+        }
+        .comment-count{
+            float: right;
+        }
+    </style>
+{% endblock %}
+
+{% block container %}
+    <div class="left-container">
+        <div class="post-con">
+            <div class="post-nav">
+                <a href="{{ url_for('post.list') }}"
+                        {% if c_sort == '1' %}
+                            class="post-nav-list"
+                        {% else %}
+                            class="post-nav-list current"
+                        {% endif %}>推荐</a>
+                <a href="{{ url_for('post.list',s=1) }}"
+                        {% if c_sort == '1' %}
+                            class="post-nav-list current"
+                        {% else %}
+                            class="post-nav-list"
+                        {% endif %}>最新</a>
+                <a href="{{ url_for('post.post') }}" class="btn btn-warning post-nav-btn">发表新帖子</a>
+            </div>
+            <ul class="post-list">
+                {% for post in posts %}
+                    <li data-id="{{ post.id }}">
+                        <div class="post-list-img">
+                            <a href="#">
+                                <img src="http://cdn.fds.api.xiaomi.com/b2c-bbs/cn/115142889/avatar.jpg?&width=50&height=50" alt="">
+                            </a>
+                        </div>
+                        <div class="post-list-con">
+                            <div class="title">
+                                <a class="title_name" href="{{ url_for('post.detail',post_id=post.id) }}">
+                                    {{ post.title }}
+                                    {% if post.highlight %}
+                                        <span class="label label-danger">精</span>
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="auth-msg">
+                                <a href="#" class="user_name">{{ post.author.username }}</a>
+                                <span class="time">{{ post.create_time|handle_time }}</span>
+                                <span class="comment-count">评论：{{ post.comments|length }}</span>
+                                <span class="read-count">阅读：{{ post.readed_count }}</span>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if t_page > 1 %}
+                <div class="page-nav">
+                <nav>
+                    <ul class="pagination">
+                        {# 左边的 #}
+                        {% if c_page <= 1 %}
+                            <li class="disabled"><span>&laquo;</span></li>
+                        {% else %}
+                            <li><a href="{{ url_for('post.list',page=c_page-1,sort=c_sort) }}">&laquo;</a></li>
+                        {% endif %}
+
+                        {# 中间的 #}
+                        {% for page in pages %}
+                           {% if c_page == page %}
+                               <li class="active"><span>{{ page }}</span></li>
+                           {% else %}
+                               <li><a href="{{ url_for('post.list',page=page,sort=c_sort) }}">{{ page }}</a></li>
+                           {% endif %}
+                        {% endfor %}
+
+                        {# 右边的 #}
+                        {% if c_page == t_page %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% else %}
+                            <li><a href="{{ url_for('post.list',page=c_page+1,sort=c_sort) }}">&raquo;</a></li>
+                        {% endif %}
+                  </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="right-container">
+        <div class="list-group">
+            <span class="list-group-item header">板块</span>
+            <a href="{{ url_for('post.list') }}"
+                    {% if c_board %}
+                        class="list-group-item"
+                    {% else %}
+                        class="list-group-item active"
+                    {% endif %} >所有板块</a>
+
+            {% for board in boards %}
+                <a href="{{ url_for('post.list',board=board.id) }}"
+                   {% if c_board|int==board.id %}
+                        class="list-group-item active"
+                   {% else %}
+                        class="list-group-item"
+                   {% endif %} data-board-id="{{ board.id }}">{{ board.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

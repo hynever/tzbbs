@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="{{ url_for('static',filename='common/editor/css/wangEditor.min.css') }}">
+<div class="editor-box form-group">
+    <textarea name="" id="editor"></textarea>
+</div>
+<div class="progress" style="display: none;" id="progress">
+    <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0">
+    </div>
+</div>
+<div class="form-group">
+    <button class="btn btn-info" data-loading-text="上传中..." id="upload-btn">上传图片或视频</button>
+</div>
+<script src="{{ url_for('static',filename='common/editor/js/wangEditor.min.js') }}"></script>
+<script src="https://cdn.staticfile.org/Plupload/2.1.1/moxie.js"></script>
+	<script src="https://cdn.staticfile.org/Plupload/2.1.1/plupload.dev.js"></script>
+	<script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.js"></script>
+    <script src="{{ url_for('static',filename='common/xt/xtqiniu.js') }}"></script>
+<script>
+// 创建编辑器
+$(function () {
+    var editor = new wangEditor('editor');
+    editor.create();
+    window.editor = editor;
+});
+ //绑定上传媒体文件的执行事件
+$(function () {
+    var progressBar = $('#progress');
+    var progressInner = progressBar.children(0);
+    xtqiniu.setUp({
+        'browse_btn': 'upload-btn',
+        'fileadded':function (up,files) {
+            progressBar.show();
+            // 禁掉按钮
+            $('#upload-btn').button('loading');
+        },
+        'success':function (up,file,info) {
+            progressBar.hide();
+            //将图片或者视频插入到文本编辑器中
+            if(file.type.indexOf('video') >= 0){
+                var videoTag = '<video controls width="640" height="480" autoplay><source src='+ file.name +'></video>';
+                window.editor.command(null,'insertHtml',videoTag);
+            }else if(file.type.indexOf('image') >= 0){
+                var imgTag = $('<img style="max-width:100%;"/>');
+                imgTag.attr('src',file.name);
+                window.editor.$txt.append(imgTag.get(0));
+            }
+            xtalert.alertSuccessToast('上传成功！');
+        },
+        'error': function (up,err,errTip) {
+            xtalert.alertErrorToast('上传失败！');
+        },
+        'progress': function (up,file) {
+            // file.percent,file.speed
+            progressInner.attr('aria-valuenow',file.percent);
+            progressInner.css('width',file.percent+'%');
+            progressInner.text(file.percent+'%');
+        },
+        'complete':function () {
+            $('#upload-btn').button('reset');
+            progressInner.attr('aria-valuenow',0);
+            progressInner.css('width',0);
+            progressInner.text('0%');
+        }
+    });
+});
+</script>

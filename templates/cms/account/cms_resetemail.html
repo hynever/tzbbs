@@ -1,0 +1,34 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}修改邮箱{% endblock %}
+
+{% block page_title %}修改邮箱{% endblock %}
+
+{% block head %}
+    <style>
+        .main{
+            max-width: 350px;
+        }
+        #send-mail-btn{
+            cursor: pointer;
+        }
+    </style>
+    <script src="{{ url_for('static',filename='cms/account/js/cms_resetemail.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+    <form action="" method="POST">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="email" name="email" class="form-control" required autofocus placeholder="新邮箱">
+                <span class="input-group-addon" id="send-mail-btn">获取验证码</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="text" name="captcha" placeholder="邮箱验证码" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" id="submit-btn">立即修改</button>
+        </div>
+    </form>
+{% endblock %}

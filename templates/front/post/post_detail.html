@@ -1,0 +1,207 @@
+{% extends 'front/base/front_base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/post/css/post_detail.css') }}">
+    <style>
+        .origin-comment-group blockquote{
+            margin: 10px 0;
+            padding: 20px;
+            border: 1px solid #f3f3f3;
+            line-height: 20px;
+            background: #fafafa;
+            font-size: 14px;
+        }
+        .avatar-group{
+            text-align: center;
+        }
+        .avatar-group .avatar-img{
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border:1px solid #e6e6e6;
+            padding: 5px;
+        }
+        .author-group .username{
+            text-align: center;
+            font-size: 18px;
+        }
+        .author-group .txt{
+            text-align: center;
+            font-size: 12px;
+            padding-top: 5px;
+            color: #8c8c8c;
+        }
+        .author-group .btn-box{
+            margin-top: 10px;
+            text-align: center;
+        }
+        .list-group{
+            margin-top: 10px;
+        }
+        .star-group{
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .star-group button{
+            float: left;
+        }
+        .star-group a{
+            float: left;
+            margin-left: 10px;
+        }
+        .star-group a img{
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container_wrap">
+        <div class="left-container">
+            <div class="post-container">
+                <div class="post-container-inner">
+                    <div class="post-top">
+                        <h2>{{ post.title }}</h2>
+                        <p class="post-info">
+                            {% if post.highlighg %}
+                                <span class="highlight">加精</span>
+                            {% endif %}
+                            <span>发表时间：{{ post.create_time }}</span>
+                            <span>作者：{{ post.author.username }}</span>
+                            <span>所属板块：{{ post.board.name|default('无板块') }}</span>
+                            <span class="comment-count">评论数：{{ post.comments|length }}</span>
+                            <span class="read-count">阅读数：{{ post.readed_count|default(0) }}</span>
+                        </p>
+                    </div>
+                    <div class="post-content">
+                        {{ post.content|safe }}
+                    </div>
+                    <div class="star-group">
+                            {% if front_user.id in star_authors %}
+                                <button class="btn btn-default btn-xs" id="unstar-btn" data-post-id="{{ post.id }}">已赞</button>
+                            {% else %}
+                                <button class="btn btn-info btn-xs" id="star-btn" data-post-id="{{ post.id }}">点赞</button>
+                            {% endif %}
+                        {% for star in post.stars %}
+                            <a href="{{ url_for('f_account.profile',user_id=star.author.id) }}"><img src="{{ star.author.avatar or url_for('static',filename='front/images/logo.jpg') }}" alt=""></a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="comment-btn-group">
+                    <a href="{{ url_for('post.comment',post_id=post.id) }}" class="btn btn-primary">发表评论</a>
+                </div>
+            </div>
+            <div class="comment-list-group">
+                <div class="comment-list-group-inner">
+                    <div class="comment-title">
+                        <p>评论列表</p>
+                    </div>
+                    <ul class="comment-list">
+                        {% for comment in post.comments %}
+                            <li>
+                                <div class="comment-img">
+                                    <a href="#"><img class="user-head" src="{{ comment.author.avatar or url_for('static',filename='front/images/logo.jpg') }}" alt=""></a>
+                                </div>
+                                <div class="comment-content">
+                                    <p class="author-info">
+                                        <span>{{ comment.author.username }}</span>
+                                        <span>{{ comment.points }}</span>
+                                        <span>{{ comment.create_time }}</span>
+                                    </p>
+                                    {% if comment.origin_comment %}
+                                        <div class="origin-comment-group">
+                                        <blockquote>{{ comment.origin_comment.author.username}} 发表于 {{ comment.origin_comment.create_time }}
+                                            <p>{{ comment.origin_comment.content|safe }}</p>
+                                        </blockquote>
+                                        </div>
+                                    {% endif %}
+                                    <p class="comment-txt">{{ comment.content|safe }}</p>
+                                    <div class="comment-btn">
+                                        <a href="{{ url_for('post.comment',post_id=post.id,comment_id=comment.id) }}" class="reply-btn">回复</a>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right-container">
+            <div class="author-group">
+                <div class="avatar-group">
+                    <a href="{{ url_for('f_account.profile',user_id=post.author.id) }}"><img src="{{ post.author.avatar or url_for('static',filename='front/images/logo.jpg') }}" alt="" class="avatar-img"></a>
+                </div>
+                <p class="username">{{ post.author.username }}</p>
+                <p class="txt">
+                    {% for role in post.author.roles %}
+                        {% if loop.last %}
+                            {{ role.name }}
+                        {% else %}
+                            {{ role.name }},
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="txt">{{ post.author.points }}积分</p>
+                <div class="btn-box">
+                    <a href="{{ url_for('f_account.profile',user_id=post.author.id) }}" class="btn btn-warning">Ta的主页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('#star-btn').click(function () {
+                var self = $(this);
+                // 发送ajax请求
+                xtajax.post({
+                    'url': '/post/star/',
+                    'data': {
+                        'post_id': self.attr('data-post-id'),
+                    },
+                    'success': function (data) {
+                        if(data['code'] == '401'){
+                            window.location = '/account/login/'
+                        }else if(data['code'] != 200){
+                            xtalert.alertInfoToast(data['message']);
+                        }else{
+                            xtalert.alertSuccessToast('赞成功！');
+                            window.location.reload();
+                        }
+                    }
+                });
+            });
+        });
+
+        $(function () {
+            $('#unstar-btn').click(function () {
+                var self = $(this);
+                // 发送ajax请求
+                xtajax.post({
+                    'url': '/post/unstar/',
+                    'data': {
+                        'post_id': self.attr('data-post-id'),
+                    },
+                    'success': function (data) {
+                        if(data['code'] != 200){
+                            xtalert.alertInfoToast(data['message']);
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1000);
+                        }else{
+                            xtalert.alertSuccessToast('取消赞成功！');
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1000);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

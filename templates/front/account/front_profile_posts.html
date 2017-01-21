@@ -1,0 +1,83 @@
+{% extends 'front/account/front_profile_base.html' %}
+
+{% block profile_head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/account/css/front_profile_posts.css') }}">
+    <script>
+        $(function () {
+            $('#post-btn').click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                if(!self.hasClass('current')){
+                    self.addClass('current');
+                    var post_list = $(".post-list");
+                    var comment_list = $('.comment-list');
+                    post_list.show();
+                    comment_list.hide();
+                    $('#comment-btn').removeClass('current');
+                }
+            });
+            $('#comment-btn').click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                if(!self.hasClass('current')){
+                    self.addClass('current');
+                    var post_list = $(".post-list");
+                    var comment_list = $('.comment-list');
+                    post_list.hide();
+                    comment_list.show();
+                    $('#post-btn').removeClass('current');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block posts %}
+active
+{% endblock %}
+
+{% block right_content %}
+    <div class="theme-nav">
+        <a href="#" class="theme-nav-list current" id="post-btn">帖子</a>
+        <a href="#" id="comment-btn" class="theme-nav-list">回复</a>
+    </div>
+    <div class="post-list">
+        <table class="table">
+            <thead>
+                <th>标题：</th>
+                <th>板块</th>
+                <th>回复/查看</th>
+            </thead>
+            <tbody>
+                {% for post in current_user.posts %}
+                    <tr>
+                        <td><a href="{{ url_for('post.detail',post_id=post.id) }}">{{ post.title }}</a></td>
+                        <td>{{ post.board.name }}</td>
+                        <td>{{ post.comments|length }}/{{ post.readed_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="comment-list" style="display: none;">
+        <table class="table">
+            <thead>
+                <th>评论</th>
+                <th>板块</th>
+            </thead>
+            <tbody>
+                {% for comment in current_user.comments %}
+                    <tr>
+                        <td>
+                            <p>
+                                帖子：<a href="{{ url_for('post.detail',post_id=comment.post.id) }}">{{ comment.post.title }}</a>
+                            </p>
+                            <p class="comment-p">{{ comment.content|safe }}</p>
+                        </td>
+                        <td>{{ comment.post.board.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

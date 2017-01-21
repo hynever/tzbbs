@@ -1,0 +1,88 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}帖子管理{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='cms/post/css/cms_posts.css') }}">
+    <script src="{{ url_for('static',filename='cms/post/js/cms_posts.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}帖子管理{% endblock %}
+
+{% block main %}
+    <div class="top-group">
+        <div class="sort-group">
+            <label for="">排序：</label>
+            <select name="sort" id="sort-select">
+                <option value="1" {% if c_sort == 1 %}selected{% endif %}>按时间</option>
+                <option value="2" {% if c_sort == 2 %}selected{% endif %}>按精品</option>
+                <option value="3" {% if c_sort == 3 %}selected{% endif %}>按阅读量</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="">过滤板块：</label>
+            <select name="" id="filter-select">
+                {% for board in boards %}
+                    <option value="{{ board.id }}" {% if board.id == c_board %}selected{% endif %}>{{ board.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <table class="table table-bordered posts-table">
+        <thead>
+            <th>标题</th>
+            <th>发布时间</th>
+            <th>作者</th>
+            <th>板块</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+                <tr>
+                    <td><a href="{{ url_for('index') }}">{{ post.title }}</a></td>
+                    <td>{{ post.create_time }}</td>
+                    <td>{{ post.author.username }}</td>
+                    <td>{{ post.board.name }}</td>
+                    <td>
+                        <ul class="operate-group">
+                            {% if post.highlight_id %}
+                                <li><button class="btn btn-primary unhighlight-btn btn-xs" data-post-id="{{ post.id }}">取消精</button></li>
+                            {% else %}
+                                <li><button class="btn btn-primary highlight-btn btn-xs" data-post-id="{{ post.id }}">加精</button></li>
+                            {% endif %}
+                            <li><button href="#" class="btn btn-danger remove-btn btn-xs" data-post-id="{{ post.id }}">移除</button></li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="page-nav">
+        <nav>
+            <ul class="pagination">
+                {# 左边的 #}
+                {% if c_page <= 1 %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% else %}
+                    <li><a href="{{ url_for('cms.posts',page=c_page-1,sort=c_sort) }}">&laquo;</a></li>
+                {% endif %}
+
+                {# 中间的 #}
+                {% for page in pages %}
+                   {% if c_page == page %}
+                       <li class="active"><span>{{ page }}</span></li>
+                   {% else %}
+                       <li><a href="{{ url_for('cms.posts',page=page,sort=c_sort) }}">{{ page }}</a></li>
+                   {% endif %}
+                {% endfor %}
+
+                {# 右边的 #}
+                {% if c_page >= t_page or t_page == 0 %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% else %}
+                    <li><a href="{{ url_for('cms.posts',page=c_page+1,sort=c_sort) }}">&raquo;</a></li>
+                {% endif %}
+          </ul>
+        </nav>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}添加新板块{% endblock %}
+
+{% block head %}
+    <style>
+        .board-group{
+            max-width: 400px;
+        }
+    </style>
+    <script src="{{ url_for('static',filename="cms/post/js/cms_add_board.js") }}"></script>
+{% endblock %}
+
+{% block page_title %}添加新板块{% endblock %}
+
+{% block main %}
+    <div class="board-group">
+        <form action="" method="POST" role="form">
+            <div class="form-group">
+                <label for="" class="control-label">板块名称：</label>
+                <input type="text" class="form-control" name="name" placeholder="请输入板块名称" required autofocus>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" id="submit-btn">保存</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

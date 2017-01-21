@@ -1,0 +1,41 @@
+{% extends 'front/base/front_base.html' %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/post/css/post.css') }}">
+    <script src="{{ url_for('static',filename='front/post/js/post.js') }}"></script>
+{% endblock %}
+
+
+{% block title %}发帖{% endblock %}
+
+{% block container %}
+    <form action="" method="POST">
+        <div class="container">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">标题</span>
+                    <input type="text" class="form-control title-input" id="title-input" placeholder="请输入标题（字数在3-100之间）">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">板块</span>
+                    <select name="board" id="board-select" class="form-control">
+                        {% for board in boards %}
+                            <option value="{{ board.id }}">{{ board.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% include 'common/editor/editor.html' %}
+            <div class="form-group captcha-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="captcha-input">
+                    <span class="input-group-addon captcha-addon"><img class="captcha-img" src="{{ url_for('common.captcha')}}" alt="" id="captcha-img"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-danger" type="submit" id="submit-btn">发表帖子</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

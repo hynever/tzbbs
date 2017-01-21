@@ -1,0 +1,61 @@
+{% extends 'cms/base/cms_base.html' %}
+
+
+{% block title %}{% endblock %}
+
+{% block head %}
+    <style>
+        .top-group{
+            text-align: right;
+        }
+    </style>
+    <script src="{{ url_for('static',filename='cms/supermanage/js/cms_cmsusers.js') }}"></script>
+{% endblock %}
+
+{% block page_title %}{{ self.title() }}{% endblock %}
+
+{% block main %}
+    <div class="top-group">
+        <a href="{{ url_for('cms.add_cmsuser') }}" class="btn btn-warning" id="add-user-btn">添加管理员</a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <th>用户名</th>
+            <th>加入时间</th>
+            <th>分组</th>
+            <th>状态</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+            {% for user in cms_users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.joined_time }}</td>
+                    <td>
+                        {% for role in user.roles %}
+                            {% if loop.last %}
+                                {{ role.name }}
+                            {% else %}
+                                {{ role.name }},
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="label label-success">可用</span>
+                        {% else %}
+                            <span class="label label-danger">已拉黑</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not user.is_superadmin %}
+                            <a href="{{ url_for('cms.edit_cmsuser',user_id=user.id) }}" class="btn btn-primary btn-xs">编辑</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{% endblock %}
+

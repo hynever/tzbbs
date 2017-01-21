@@ -1,0 +1,46 @@
+
+.top-group{
+    padding: 5px 10px;
+    border-radius: 2px;
+    background: #ecedf0;
+    overflow: hidden;
+}
+
+.sort-group{
+    float: left;
+}
+
+.filter-group{
+    float: right;
+}
+
+select{
+    border: 1px solid #dfdfdf;
+    background: none;
+    color: #666;
+    border-radius: 2px;
+}
+
+
+.posts-table{
+    margin-top: 5px;
+}
+
+.posts-table th:nth-of-type(1){
+    width: 50%;
+    text-align: left;
+}
+.posts-table th:last-of-type{
+    width: 120px;
+}
+
+.operate-group li{
+    float: left;
+}
+.operate-group li:nth-of-type(1){
+    margin-right: 10px;
+}
+
+.page-nav{
+    text-align: center;
+}

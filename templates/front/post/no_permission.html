@@ -1,0 +1,30 @@
+{% extends 'front/base/front_base.html' %}
+
+{% block title %}提示信息-潭州Python论坛{% endblock %}
+
+{% block head %}
+    <style>
+        .container{
+            width: 990px;
+            height: 400px;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            text-align: center;
+        }
+        .container-inner{
+            padding-top: 100px;
+        }
+        .btn-group{
+            margin-top: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block container %}
+    <div class="container-inner">
+        <h2>很抱歉，您暂时没有权限访问该页面</h2>
+        <div class="btn-group">
+            <a href="{{ url_for('index') }}" class="btn btn-warning btn-lg">回到首页</a>
+        </div>
+    </div>
+{% endblock %}

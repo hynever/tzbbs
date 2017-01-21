@@ -1,0 +1,64 @@
+{% extends 'cms/base/cms_base.html' %}
+{% block title %}个人信息{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='cms/account/css/cms_profile.css') }}">
+{% endblock %}
+
+{% block page_title %}个人信息{% endblock %}
+{% block main %}
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>
+                    用户名：
+                </td>
+                <td>
+                    {{ cms_user.username }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    邮箱：
+                </td>
+                <td>
+                    {{ cms_user.email }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    角色：
+                </td>
+                <td>
+                    {% for role in cms_user.roles %}
+                        {% if loop.last %}
+                            {{ role.name }}
+                        {% else %}
+                            {{ role.name }},
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    权限：
+                </td>
+                <td>
+                    {%- for permission_dict in cms_user.permissions %}
+                        {{ permission_dict.values()[0][1] }}
+                        {% if not loop.last %}
+                            ,
+                        {% endif %}
+                    {%- endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    加入时间：
+                </td>
+                <td>
+                    {{ cms_user.joined_time }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

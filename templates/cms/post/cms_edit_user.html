@@ -1,0 +1,43 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}编辑用户-{{ user.username }}{% endblock %}
+
+{% block head %}
+    <style>
+        .main-content{
+            width: 400px;
+        }
+    </style>
+    <script src="{{ url_for('static',filename="cms/post/js/cms_edit_user.js") }}"></script>
+{% endblock %}
+
+{% block page_title %}{{ self.title() }}{% endblock %}
+
+{% block main %}
+    <div class="main-content">
+        <div class="form-group">
+            <label>用户名：</label>
+            <input type="text" class="form-control" placeholder="请输入用户名" value="{{ user.username }}" readonly>
+        </div>
+        <div class="form-group role-group">
+            <label>添加分组：</label>
+            {% for role in roles %}
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="{{ role.id }}" {% if role.id in current_roles %}checked{% endif %}>{{ role.name }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {% if user.is_active %}
+                <button class="btn btn-danger" id="add-backlist-btn" data-user-id="{{ user.id }}">拉黑</button>
+            {% else %}
+                <button class="btn btn-warning" id="remove-backlist-btn" data-user-id="{{ user.id }}">取消拉黑</button>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" id="submit-btn" data-user-id="{{ user.id }}">保存</button>
+        </div>
+    </div>
+{% endblock %}

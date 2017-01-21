@@ -1,0 +1,95 @@
+{% extends 'cms/base/cms_base.html' %}
+
+{% block title %}编辑板块-{{ board.name }}{% endblock %}
+
+{% block head %}
+    <style>
+        .board-group{
+            max-width: 400px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#submit-btn').click(function (event) {
+                var self = $(this);
+                event.preventDefault();
+                // 获取板块名称
+                var nameInput = $('input[type="text"][name="name"]');
+                var name = nameInput.val();
+
+                if(!name){
+                    xtalert.alertInfo('请输入板块名称！');
+                    return;
+                }
+
+                var roles = [];
+                var publicInput = $('input[name="public"]');
+                var isPublic = publicInput.is(':checked');
+                var checkboxs = $('.role-checkbox').filter(':checked');
+                if(!isPublic){
+                    checkboxs.each(function (index,element) {
+                        roles.push($(element).val());
+                    });
+                }
+
+                // 发送ajax请求
+                xtajax.post({
+                    'url': '/cms/boards/edit_board/',
+                    'data':{
+                        'id': self.attr('data-board-id'),
+                        'name': name,
+                        'roles[]': roles
+                    },
+                    'success': function (data) {
+                        if(data['code'] != 200){
+                            xtalert.alertInfoToast(data['message']);
+                        }else{
+                            // 跳转到板块管理页面
+                            xtalert.alertSuccessToast('修改成功！');
+                            setTimeout(function () {
+                                window.location = '/cms/boards/';
+                            },1000);
+                        }
+                    },
+                    'error': function () {
+                        xtalert.alertNetworkError();
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block page_title %}{{ self.title() }}{% endblock %}
+
+{% block main %}
+    <div class="board-group">
+        <form action="" method="POST" role="form">
+            <div class="form-group">
+                <label for="" class="control-label">板块名称：</label>
+                <input type="text" class="form-control" name="name" placeholder="请输入板块名称" value="{{ board.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="control-label">是否公开：</label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="public" {% if board.is_public %}checked{% endif %}>公开
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" id="role-group">
+                <label class="control-label">选择分组（被选中的组可见）：</label>
+                {% for role in roles %}
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="role-checkbox" value="{{ role.id }}" {% if role.id in current_roles %}checked{% endif %}> {{ role.name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="submit-btn" data-board-id="{{ board.id }}">保存</button>
+                </div>
+        </form>
+    </div>
+{% endblock %}

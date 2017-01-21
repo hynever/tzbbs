@@ -1,0 +1,16 @@
+
+.top-group{
+    padding: 5px 10px;
+    border-radius: 2px;
+    background: #ecedf0;
+    overflow: hidden;
+    text-align: right;
+}
+
+.table{
+    margin-top: 10px;
+}
+
+.table td:last-of-type{
+    width: 120px;
+}

@@ -1,0 +1,86 @@
+{% extends 'front/base/front_base.html' %}
+
+{% block title %}评论{% endblock %}
+
+{% block head %}
+    <style>
+        .container{
+            width: 990px;
+            background: #fff;
+            margin: 10px auto;
+            border: 1px solid #e6e6e6;
+        }
+        .container-inner{
+            background: #fff;
+            padding: 30px;
+            position: relative;
+        }
+    .post-title{
+        padding: 20px 0;
+    }
+    .origin-comment-group{
+        padding-bottom: 20px;
+    }
+    #editor{
+        height: 300px;
+    }
+    </style>
+{% endblock %}
+
+{% block container %}
+    <div class="container-inner">
+        <div class="post-title">
+            <a href="{{ url_for('post.detail',post_id=post.id) }}">{{ post.title }}</a>
+        </div>
+        {% if origin_comment %}
+            <div class="origin-comment-group" data-comment-id="{{ origin_comment.id }}">
+                回复{{ origin_comment.author.username }}：
+                <p>“{{ origin_comment.content|safe }}”</p>
+            </div>
+        {% endif %}
+        {% include 'common/editor/editor.html' %}
+        <div class="bottom-group">
+            <button class="btn btn-warning" data-post-id="{{ post.id }}" id="submit-btn">提交评论</button>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('#submit-btn').click(function (event) {
+                event.preventDefault();
+                var self = $(this);
+                var post_id = self.attr('data-post-id');
+
+                var content = editor.$txt.html();
+                var content_txt = editor.$txt.text();
+                if(content.length == 0){
+                    xtalert.alertInfoToast('请输入内容');
+                    return;
+                }
+                data = {
+                    'content': content,
+                    'post_id': post_id,
+                }
+                var commentTag = $('.origin-comment-group');
+                if(commentTag){
+                    data['comment_id'] = commentTag.attr('data-comment-id');
+                }
+                // 通过ajax发送请求
+                xtajax.post({
+                    'url': '/post/comment/',
+                    'data': data,
+                    'success': function (data) {
+                        if(data['code'] != 200){
+                            console.log(data);
+                            xtalert.alertInfoToast(data['message']);
+                        }else{
+                            xtalert.alertSuccessToast('发表成功！');
+                            setTimeout(function () {
+                                window.location = '/post/detail/' + post_id;
+                            },1000);
+                        }
+                    }
+                });
+            })
+        });
+    </script>
+{% endblock %}
