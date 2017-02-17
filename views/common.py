@@ -31,8 +31,8 @@ def captcha():
 def qiniu_token():
 
     # 设置AccessKey和SecretKey
-    access_key = 'M4zCEW4f9XPanbMN-Lb9O0S8j893f0e1ezAohFVL'
-    secret_key = '7BKV7HeEKM3NDJk8_l_C89JI3SMmeUlAIatzl9d4'
+    access_key = ''
+    secret_key = ''
 
     # 授权
     q = qiniu.Auth(access_key,secret_key)
@@ -79,8 +79,8 @@ def telphone_captcha():
     telphone_captcha = xtcaptcha.Captcha.gene_text()
     xtcache.set(telphone,telphone_captcha,timeout=600) # 10分钟过期
 
-    app_key = '23586230'
-    app_secret = '34a09759be9776570f84390f60b24778'
+    app_key = ''
+    app_secret = ''
     req = top.setDefaultAppInfo(app_key,app_secret)
     req = top.api.AlibabaAliqinFcSmsNumSendRequest()
     req.extend = ""
