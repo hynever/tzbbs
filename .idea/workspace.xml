@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26863108-b6f5-40ae-b7ec-17ec1484d613" name="默认" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/cms/base/cms_home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/manage.py" afterPath="$PROJECT_DIR$/manage.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tzbbs.py" afterPath="$PROJECT_DIR$/tzbbs.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/cms/cmsviews.py" afterPath="$PROJECT_DIR$/views/cms/cmsviews.py" />
-    </list>
+    <list default="true" id="26863108-b6f5-40ae-b7ec-17ec1484d613" name="默认" comment="" />
     <ignored path="TZBBS.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -63,8 +56,8 @@
       <file leaf-file-name="tzbbs.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tzbbs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2136">
-              <caret line="89" column="41" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
+            <state relative-caret-position="456">
+              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding>
                 <element signature="e#15#71#0" expanded="true" />
               </folding>
@@ -983,8 +976,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tzbbs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2136">
-          <caret line="89" column="41" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
+        <state relative-caret-position="456">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding>
             <element signature="e#15#71#0" expanded="true" />
           </folding>
