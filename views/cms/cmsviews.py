@@ -23,8 +23,7 @@ bp = flask.Blueprint('cms',__name__,url_prefix='/cms/')
 @bp.route('/')
 @login_required
 def home():
-    print flask.g.cms_user.is_superadmin
-    return flask.render_template('cms/base/cms_base.html')
+    return flask.render_template('cms/base/cms_home.html')
 
 
 @bp.route('profile/')

@@ -1,14 +1,15 @@
 #coding: utf8
 import flask
 from flask_migrate import Migrate,MigrateCommand
-from flask_script import Manager
+from flask_script import Manager,Server
 import config
 from exts import db
+from tzbbs import app
 from models.common import basemodels,postmodels
 from models.front import accountmodels as front_accountmodels
 from models.cms import accountmodels as cms_accountmodels
 
-app = flask.Flask(__name__)
+# app = flask.Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 
@@ -19,6 +20,7 @@ manager = Manager(app)
 migrate = Migrate(app,db)
 
 manager.add_command('db',MigrateCommand)
+manager.add_command('runserver',Server)
 
 CMSRole = cms_accountmodels.CMSRole
 CMSUser = cms_accountmodels.CMSUser
